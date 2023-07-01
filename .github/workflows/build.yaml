@@ -1,0 +1,40 @@
+name: CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+        shell: bash
+
+      - name: Download app deps
+        run: ./gradlew androidDependencies
+        shell: bash
+
+      - name: Build
+        run: ./gradlew clean assembleRelease
+        shell: bash
+
+      - name: Output apk names
+        run: ls $(find app/build/ -type f -name "*.apk")
+        shell: bash
+
