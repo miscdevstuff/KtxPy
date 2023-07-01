@@ -34,7 +34,25 @@ jobs:
         run: ./gradlew clean assembleRelease
         shell: bash
 
-      - name: Output apk names
-        run: ls $(find app/build/ -type f -name "*.apk")
+      - name: Sign release APK
+        run: |
+          apksigner="$(find $ANDROID_SDK_ROOT/build-tools -name apksigner | sort -r | head -n 1)"
+          "$apksigner" sign --ks public.jks --ks-key-alias public --ks-pass pass:public --key-pass pass:public --in ./app/build/outputs/apk/arch_arm/release/app-arch_arm-release-unsigned.apk --out ./app-arch_arm-release-signed.apk
+          "$apksigner" sign --ks public.jks --ks-key-alias public --ks-pass pass:public --key-pass pass:public --in ./app/build/outputs/apk/arch_arm64/release/app-arch_arm64-release-unsigned.apk --out ./app-arch_arm64-release-signed.apk
         shell: bash
+
+      - name: Upload arm apk
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-arch_arm-release-signed
+          path: ./app-arch_arm-release-signed.apk
+          if-no-files-found: error
+
+      - name: Upload arm64 apk
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-arch_arm64-release-signed
+          path: ./app-arch_arm64-release-signed.apk
+          if-no-files-found: error
+
 
