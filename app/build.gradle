@@ -38,10 +38,10 @@ android {
             versionCode 2*1000+1
             versionNameSuffix "-arm64"
         }
-        arch_x86_64 {
+        arch_arm {
             dimension 'cpuArch'
             versionCode 1*1000+1
-            versionNameSuffix "-x86"
+            versionNameSuffix "-armv7"
         }
     }
         buildFeatures.viewBinding = true
@@ -78,9 +78,9 @@ android {
             kotlinCompilerExtensionVersion '1.4.7'
         }
     sourceSets {
-        arch_x86_64 {
+        arch_arm {
             sourceSets {
-                assets.srcDirs = ["arch_x86_64/assets"]
+                assets.srcDirs = ["arch_armeabi-v7a/assets"]
             }
         }
         arch_arm64{

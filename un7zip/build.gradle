@@ -8,7 +8,7 @@ android {
         targetSdkVersion 33
         ndk {
             //noinspection ChromeOsAbiSupport
-            abiFilters 'arm64-v8a', 'x86_64'
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
         }
     }
     externalNativeBuild {
