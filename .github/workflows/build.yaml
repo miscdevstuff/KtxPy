@@ -34,25 +34,7 @@ jobs:
         run: ./gradlew clean assembleDebug
         shell: bash
 
-      - name: Sign debug APK
-        run: |
-          apksigner="$(find $ANDROID_SDK_ROOT/build-tools -name apksigner | sort -r | head -n 1)"
-          "$apksigner" sign --ks public.jks --ks-key-alias public --ks-pass pass:public --key-pass pass:public --in ./app/build/outputs/apk/arch_arm/debug/app-arch_arm-debug-unsigned.apk --out ./app-arch_arm-debug-signed.apk
-          "$apksigner" sign --ks public.jks --ks-key-alias public --ks-pass pass:public --key-pass pass:public --in ./app/build/outputs/apk/arch_arm64/debug/app-arch_arm64-debug-unsigned.apk --out ./app-arch_arm64-debug-signed.apk
+      - name: Find APK paths
+        run: ls $(find app/build/ -type f -name "*.apk")
         shell: bash
-
-      - name: Upload arm apk
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-arch_arm-debug-signed
-          path: ./app-arch_arm-debug-signed.apk
-          if-no-files-found: error
-
-      - name: Upload arm64 apk
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-arch_arm64-debug-signed
-          path: ./app-arch_arm64-debug-signed.apk
-          if-no-files-found: error
-
 
